@@ -1,0 +1,5 @@
+FIREBASE_SETUP.md
+node_modules/
+.env
+.DS_Store
+firebase-config.example.js

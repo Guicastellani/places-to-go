@@ -37,7 +37,7 @@ Main screen – adding and managing date ideas <br>
 Login screen – secure authentication entry point <br>
 Completed screen – finished dates displayed with a faded style <br>
 
-<img src = "https://github.com/Guicastellani/places-to-go/blob/main/assets/main-page.png" width="1000">
+<img src = "https://github.com/Guicastellani/places-to-go/blob/main/assets/main-page.png" width="800">
 <p float="left">
 <img src = "https://github.com/Guicastellani/places-to-go/blob/main/assets/login-screen.png" width="400">
 <img src = "https://github.com/Guicastellani/places-to-go/blob/main/assets/completed-filter.png" width="400">

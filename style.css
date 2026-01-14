@@ -208,6 +208,27 @@ header h1 .highlight {
 main {
     display: flex;
     justify-content: center;
+    align-items: center;
+    position: relative;
+    min-height: 400px;
+}
+
+.side-image {
+    width: 200px;
+    height: auto;
+    display: block;
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 0;
+}
+
+.left-image {
+    left: 100px;
+}
+
+.right-image {
+    right: 100px;
 }
 
 .list-container {
@@ -463,6 +484,10 @@ main {
 @media (max-width: 600px) {
     header h1 {
         font-size: 2rem;
+    }
+
+    .side-image {
+        display: none;
     }
 
     .list-container {

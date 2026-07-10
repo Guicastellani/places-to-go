@@ -45,6 +45,13 @@ jobs:
             "$FIREBASE_APP_ID" \
             > firebase-config.js
 
+      - name: Debug - verify secret injection
+        run: |
+          echo "databaseURL value length: ${#FIREBASE_DATABASE_URL}"
+          cat firebase-config.js
+        env:
+          FIREBASE_DATABASE_URL: ${{ secrets.FIREBASE_DATABASE_URL }}
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 

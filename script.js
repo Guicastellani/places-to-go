@@ -95,8 +95,9 @@ function handleLogin(e) {
   loginBtn.disabled = true;
   loginBtn.textContent = "Entrando...";
 
-  const bcryptLib = typeof bcrypt !== "undefined" ? bcrypt
-    : (window.dcodeIO && window.dcodeIO.bcrypt);
+  const bcryptLib = typeof dcodeIO !== "undefined" && typeof dcodeIO === "object"
+    ? dcodeIO.bcrypt
+    : (typeof bcrypt !== "undefined" ? bcrypt : null);
 
   if (!bcryptLib) {
     alert("Erro ao carregar biblioteca de segurança. Tente recarregar a página.");

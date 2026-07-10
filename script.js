@@ -83,6 +83,15 @@ function handleLogin(e) {
     return;
   }
 
+  if (!window.usersRef) {
+    alert("Conectando ao servidor, tente novamente em instantes.");
+    return;
+  }
+
+  const loginBtn = loginForm.querySelector("button[type=submit]");
+  loginBtn.disabled = true;
+  loginBtn.textContent = "Entrando...";
+
   // Look up the user record in Firebase, then verify with bcrypt
   window.usersRef.child(username).once("value")
     .then((snapshot) => {
@@ -105,6 +114,10 @@ function handleLogin(e) {
       alert("Usuário ou senha incorretos!");
       passwordInput.value = "";
       usernameInput.focus();
+    })
+    .finally(() => {
+      loginBtn.disabled = false;
+      loginBtn.textContent = "Entrar";
     });
 }
 

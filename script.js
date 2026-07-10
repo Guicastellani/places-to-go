@@ -13,12 +13,6 @@ const placesList = document.getElementById("placesList");
 const filterBtns = document.querySelectorAll(".filter-btn");
 const emptyState = document.getElementById("emptyState");
 
-const validUsers = {
-  Cococo: "98fabf9c911e3a39ac527db68a103336b347a316d791f4edfea4574a15c63aec",
-  Capivarinha:
-    "5a5c868f27ca90afd26a36a0dea543d36e89b2797764d868ed54f49e101fc200",
-};
-
 // State
 let places = [];
 let currentFilter = "active";
@@ -79,44 +73,39 @@ function showApp() {
   enableControls();
 }
 
-// Função para gerar SHA256 usando SubtleCrypto
-async function sha256(message) {
-  const msgBuffer = new TextEncoder().encode(message);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
-  return hashHex;
-}
-
 function handleLogin(e) {
   e.preventDefault();
   const username = usernameInput.value.trim();
-  const passwordInput_value = passwordInput.value.trim();
+  const password = passwordInput.value.trim();
 
-  if (!username || !passwordInput_value) {
+  if (!username || !password) {
     alert("Por favor, preencha todos os campos!");
     return;
   }
 
-  // Hash da senha inserida
-  sha256(passwordInput_value).then((passwordHash) => {
-    console.log("Username:", username);
-    console.log("Password Hash:", passwordHash);
-    console.log("Expected Hash:", validUsers[username]);
-
-    // Validar credenciais
-    if (validUsers[username] && validUsers[username] === passwordHash) {
-      currentUser = username;
-      localStorage.setItem("currentUser", JSON.stringify(currentUser));
-      showApp();
-    } else {
+  // Look up the user record in Firebase, then verify with bcrypt
+  window.usersRef.child(username).once("value")
+    .then((snapshot) => {
+      const user = snapshot.val();
+      if (!user || !user.passwordHash) {
+        throw new Error("not_found");
+      }
+      return bcrypt.compare(password, user.passwordHash);
+    })
+    .then((match) => {
+      if (match) {
+        currentUser = username;
+        localStorage.setItem("currentUser", JSON.stringify(currentUser));
+        showApp();
+      } else {
+        throw new Error("wrong_password");
+      }
+    })
+    .catch(() => {
       alert("Usuário ou senha incorretos!");
       passwordInput.value = "";
       usernameInput.focus();
-    }
-  });
+    });
 }
 
 function handleLogout() {

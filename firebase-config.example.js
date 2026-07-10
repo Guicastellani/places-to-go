@@ -15,6 +15,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 window.database = firebase.database();
 window.placesRef = window.database.ref('places');
+window.usersRef = window.database.ref('users');
 window.firebaseReady = true;
 
 console.log('Firebase initialized successfully');

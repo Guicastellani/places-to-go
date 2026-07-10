@@ -36,7 +36,7 @@ jobs:
           FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
         run: |
-          printf 'const firebaseConfig = {\n  apiKey: "%s",\n  authDomain: "%s",\n  databaseURL: "%s",\n  projectId: "%s",\n  storageBucket: "%s",\n  messagingSenderId: "%s",\n  appId: "%s"\n};\n\nfirebase.initializeApp(firebaseConfig);\nwindow.database = firebase.database();\nwindow.placesRef = window.database.ref("places");\nwindow.firebaseReady = true;\n\nconsole.log("Firebase initialized successfully");\n' \
+          printf 'const firebaseConfig = {\n  apiKey: "%s",\n  authDomain: "%s",\n  databaseURL: "%s",\n  projectId: "%s",\n  storageBucket: "%s",\n  messagingSenderId: "%s",\n  appId: "%s"\n};\n\nfirebase.initializeApp(firebaseConfig);\nwindow.database = firebase.database();\nwindow.placesRef = window.database.ref("places");\nwindow.usersRef = window.database.ref("users");\nwindow.firebaseReady = true;\n\nconsole.log("Firebase initialized successfully");\n' \
             "$FIREBASE_API_KEY" \
             "$FIREBASE_AUTH_DOMAIN" \
             "$FIREBASE_DATABASE_URL" \

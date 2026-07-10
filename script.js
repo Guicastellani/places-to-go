@@ -95,6 +95,16 @@ function handleLogin(e) {
   loginBtn.disabled = true;
   loginBtn.textContent = "Entrando...";
 
+  const bcryptLib = typeof bcrypt !== "undefined" ? bcrypt
+    : (window.dcodeIO && window.dcodeIO.bcrypt);
+
+  if (!bcryptLib) {
+    alert("Erro ao carregar biblioteca de segurança. Tente recarregar a página.");
+    loginBtn.disabled = false;
+    loginBtn.textContent = "Entrar";
+    return;
+  }
+
   // Look up the user record in Firebase, then verify with bcrypt
   window.usersRef.child(username).once("value")
     .then((snapshot) => {
@@ -102,7 +112,7 @@ function handleLogin(e) {
       if (!user || !user.passwordHash) {
         throw new Error("not_found");
       }
-      return bcrypt.compare(password, user.passwordHash);
+      return bcryptLib.compare(password, user.passwordHash);
     })
     .then((match) => {
       if (match) {

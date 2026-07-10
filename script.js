@@ -21,11 +21,14 @@ let isFirebaseReady = false;
 
 // Initialize Firebase Listener
 function initFirebaseListener() {
-  if (typeof window.placesRef === "undefined") {
+  if (typeof window.firebaseReady === "undefined") {
     console.log("Firebase not ready yet, retrying...");
     setTimeout(initFirebaseListener, 300);
     return;
   }
+
+  window.placesRef = window.database.ref('places');
+  window.usersRef = window.database.ref('users');
 
   window.placesRef.on(
     "value",

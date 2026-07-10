@@ -319,7 +319,7 @@ function render() {
         return `
             <li class="place-item ${
               place.completed ? "completed" : ""
-            } ${creatorClass}">
+            } ${creatorClass}" data-id="${place.id}">
                 <input 
                     type="checkbox" 
                     class="checkbox" 
@@ -338,18 +338,90 @@ function render() {
                     }
                 </div>
                 <div class="creator-badge">${place.createdBy}</div>
-                <button 
-                    class="delete-btn" 
-                    onclick="deletePlace(${place.id})"
-                    ${!currentUser ? "disabled" : ""}
-                >
-                    Delete
-                </button>
+                <div class="action-btns">
+                    <button
+                        class="edit-btn"
+                        onclick="editPlace(${place.id})"
+                        ${!currentUser ? "disabled" : ""}
+                        title="Editar"
+                    >&#9998;</button>
+                    <button
+                        class="delete-btn"
+                        onclick="deletePlace(${place.id})"
+                        ${!currentUser ? "disabled" : ""}
+                        title="Deletar"
+                    >&#10005;</button>
+                </div>
             </li>
         `;
       })
       .join("");
   }
+}
+
+function editPlace(id) {
+  if (!currentUser) return;
+
+  const place = places.find((p) => p.id === id);
+  if (!place) return;
+
+  const li = placesList.querySelector(`[data-id="${id}"]`);
+  if (!li) return;
+
+  const placeInfo = li.querySelector(".place-info");
+  const editBtn = li.querySelector(".edit-btn");
+
+  // Replace place-info content with inline inputs for name and date
+  placeInfo.innerHTML = `
+    <input
+      type="text"
+      class="edit-input edit-input-name"
+      value="${escapeHtml(place.name)}"
+      onkeydown="handleEditKey(event, ${id})"
+      placeholder="Nome do lugar"
+    >
+    <input
+      type="date"
+      class="edit-input edit-input-date"
+      value="${place.date || ""}"
+      onkeydown="handleEditKey(event, ${id})"
+    >
+  `;
+  placeInfo.querySelector(".edit-input-name").focus();
+
+  // Swap edit button to a save (✓) button
+  editBtn.innerHTML = "&#10003;";
+  editBtn.title = "Salvar";
+  editBtn.onclick = () => saveEdit(id);
+}
+
+function saveEdit(id) {
+  if (!currentUser) return;
+
+  const place = places.find((p) => p.id === id);
+  if (!place) return;
+
+  const li = placesList.querySelector(`[data-id="${id}"]`);
+  if (!li) return;
+
+  const nameInput = li.querySelector(".edit-input-name");
+  const dateInput = li.querySelector(".edit-input-date");
+  const newName = nameInput ? nameInput.value.trim() : "";
+
+  if (!newName) {
+    nameInput && nameInput.focus();
+    return;
+  }
+
+  place.name = newName;
+  place.date = dateInput && dateInput.value ? dateInput.value : null;
+  savePlaces();
+  render();
+}
+
+function handleEditKey(event, id) {
+  if (event.key === "Enter") saveEdit(id);
+  if (event.key === "Escape") render();
 }
 
 function escapeHtml(text) {

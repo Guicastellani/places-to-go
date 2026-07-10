@@ -2,4 +2,6 @@ FIREBASE_SETUP.md
 node_modules/
 .env
 .DS_Store
-firebase-config.example.js
+
+# Firebase config with real secrets — generated at deploy time by CI
+firebase-config.js

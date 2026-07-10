@@ -37,6 +37,38 @@ Main screen – adding and managing date ideas <br>
 Login screen – secure authentication entry point <br>
 Completed screen – finished dates displayed with a faded style <br>
 
+## Setup & Deployment
+
+### Local development
+
+1. Copy the example config and fill in your real Firebase values:
+   ```bash
+   cp firebase-config.example.js firebase-config.js
+   ```
+2. Edit `firebase-config.js` with your project's credentials (this file is `.gitignore`d and will never be committed).
+3. Open `index.html` directly in a browser or serve it with any static server.
+
+### GitHub Actions / GitHub Pages deployment
+
+The workflow in [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) generates `firebase-config.js` at deploy time from **GitHub Secrets**, so no credentials are ever stored in the repository.
+
+Add the following secrets to your repository (**Settings → Secrets and variables → Actions → New repository secret**):
+
+| Secret name | Value |
+|---|---|
+| `FIREBASE_API_KEY` | Your Firebase API key |
+| `FIREBASE_AUTH_DOMAIN` | e.g. `your-project.firebaseapp.com` |
+| `FIREBASE_DATABASE_URL` | e.g. `https://your-project-default-rtdb.firebaseio.com` |
+| `FIREBASE_PROJECT_ID` | Your Firebase project ID |
+| `FIREBASE_STORAGE_BUCKET` | e.g. `your-project.firebasestorage.app` |
+| `FIREBASE_MESSAGING_SENDER_ID` | Your messaging sender ID |
+| `FIREBASE_APP_ID` | Your Firebase app ID |
+
+Then push to `main` — the workflow will build and deploy automatically.
+
+> **Important:** The real `firebase-config.js` is in `.gitignore`. If you previously committed it, purge it from history (see [BFG Repo Cleaner](https://rtyley.github.io/bfg-repo-cleaner/) or `git filter-repo`).
+
+##
 <img src = "https://github.com/Guicastellani/places-to-go/blob/main/assets/main-page.png" width="800">
 <p float="left">
 <img src = "https://github.com/Guicastellani/places-to-go/blob/main/assets/login-screen.png" width="400">
